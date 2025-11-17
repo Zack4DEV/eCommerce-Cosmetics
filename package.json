@@ -1,37 +1,44 @@
 {
-  "name": "app",
+  "name": "ecommerce-cosmetics",
   "version": "1.0.0",
   "main": "expo-router/entry",
+  "description": "A cross-platform eCommerce app for physical and digital cosmetic products with analytics and secure payments.",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build:web": "expo export:web",
+    "clean": "expo r -c"
   },
   "dependencies": {
-    "@expo/metro-runtime": "~5.0.4",
-    "@mendable/search": "^0.0.206",
-    "@react-native-async-storage/async-storage": "^2.1.2",
     "expo": "^53.0.7",
-    "expo-av": "^15.1.4",
-    "expo-linking": "^7.0.5",
-    "expo-localization": "^16.1.5",
-    "expo-router": "~5.0.4",
-    "expo-status-bar": "~2.2.3",
-    "i18n-js": "^4.5.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
-    "react-native-maps": "^1.23.7",
-    "@react-native-community/slider": "^4.4.2",
-    "react-native-reanimated": "^3.17.5",
+    "react-native-web": "0.20.0",
+    "expo-router": "~5.0.4",
+    "expo-constants": "^17.1.5",
+    "expo-image-picker": "^16.1.4",
+    "expo-linking": "^7.0.5",
+    "expo-secure-store": "^14.2.3",
+    "expo-status-bar": "~2.2.3",
+    "@expo/metro-runtime": "~5.0.4",
+    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-navigation/native": "^7.1.8",
+    "@react-navigation/stack": "^7.3.1",
     "react-native-safe-area-context": "^5.3.0",
     "react-native-screens": "^4.10.0",
-    "react-native-web": "0.20.0"
+    "react-native-paper": "^5.14.1",
+    "react-native-svg": "^15.11.2",
+    "react-native-chart-kit": "^6.12.0",
+    "@react-native-community/slider": "^5.1.1",
+    "firebase": "^10.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "typescript": "^5.5.4"
   },
   "private": true,
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@1.22.22"
 }
