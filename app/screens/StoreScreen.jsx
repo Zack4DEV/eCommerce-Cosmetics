@@ -1,62 +1,103 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
+ScrollView,
+StyleSheet,
+Text,
+TouchableOpacity,
+TextInput,
+FlatList,
+Modal,
 } from 'react-native';
-import AIProductRecommendations from '../components/Store/AIProductRecommendations';
-import AIAssistant from '../components/AIAssistant';
-import ProductCard from '../components/Store/ProductCard'
-import { MendableAI } from '../utils/mendableAI';
+import { products } from '../data/products';
+import ProductCard from '../components/products/ProductCard';
+import AIAssistant from '../components/common/AIAssistant';
+import { COLORS, SIZES, FONTS } from '../constants/theme';
+import { MaterialIcons } from '@expo/vector-icons';
 
-const StoreScreen = () => {
-  const [showAIAssistant, setShowAIAssistant] = useState(false);
-  const [userPreferences, setUserPreferences] = useState(null);
+const StoreScreen = ({ navigation }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isAIAssistantVisible, setAIAssistantVisible] = useState(false);
 
-  useEffect(() => {
-    analyzeUserPreferences();
-  }, []);
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const analyzeUserPreferences = async () => {
-    const preferences = await MendableAI.analyzeUserPreferences({
-      recentViews: ['skincare', 'natural'],
-      purchases: ['moisturizer'],
-    });
-    setUserPreferences(preferences);
-  };
+  const renderProductCard = ({ item }) => (
+    <ProductCard
+      product={item}
+      onPress={() => navigation.navigate('ProductDetails', { product: item })}
+    />
+  );
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
-          <Text style={styles.title}>AI-Powered Beauty Store</Text>
-          <TouchableOpacity
-            style={styles.assistantButton}
-            onPress={() => setShowAIAssistant(!showAIAssistant)}
-          >
-            <Text style={styles.assistantButtonText}>
-              {showAIAssistant ? 'Hide AI Assistant' : 'Show AI Assistant'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {showAIAssistant && (
-          <View style={styles.assistantContainer}>
-            <AIAssistant />
+          <Text style={styles.title}>Explore Collection</Text>
+          <View style={styles.searchBar}>
+            <MaterialIcons
+              name="search"
+              size={24}
+              color={COLORS.text}
+              style={styles.searchIcon}
+            />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search for products..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
           </View>
-        )}
-
-        <View style={styles.recommendationsSection}>
-          <AIProductRecommendations userPreferences={userPreferences} />
         </View>
 
         <View style={styles.featuredSection}>
-          <Text style={styles.sectionTitle}>Featured Products</Text>
-          <ProductCard />
+          <Text style={styles.sectionTitle}>Featured</Text>
+          <FlatList
+            data={products}
+            renderItem={renderProductCard}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+
+        <View style={styles.allProductsSection}>
+          <Text style={styles.sectionTitle}>All Products</Text>
+          <FlatList
+            data={filteredProducts}
+            renderItem={renderProductCard}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+          />
         </View>
       </ScrollView>
+
+      <TouchableOpacity
+        style={styles.assistantButton}
+        onPress={() => setAIAssistantVisible(true)}
+      >
+        <MaterialIcons name="assistant" size={24} color="white" />
+      </TouchableOpacity>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isAIAssistantVisible}
+        onRequestClose={() => setAIAssistantVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.assistantContainer}>
+            <AIAssistant />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setAIAssistantVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -64,57 +105,78 @@ const StoreScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f6fa',
+    backgroundColor: COLORS.lightGray,
   },
   scrollView: {
     flex: 1,
   },
   header: {
-    padding: 15,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e1e8ed',
+    padding: SIZES.padding,
+    backgroundColor: 'white',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 10,
+    ...FONTS.h1,
+    marginBottom: SIZES.padding,
   },
-  assistantButton: {
-    backgroundColor: '#3498db',
-    padding: 10,
-    borderRadius: 8,
+  searchBar: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: COLORS.lightGray,
+    borderRadius: SIZES.radius,
+    padding: SIZES.base,
   },
-  assistantButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+  searchIcon: {
+    marginHorizontal: SIZES.base,
   },
-  assistantContainer: {
-    height: 400,
-    margin: 15,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  recommendationsSection: {
-    marginVertical: 15,
+  searchInput: {
+    flex: 1,
+    ...FONTS.body,
   },
   featuredSection: {
-    padding: 15,
+    padding: SIZES.padding,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 15,
+    ...FONTS.h2,
+    marginBottom: SIZES.padding,
+  },
+  allProductsSection: {
+    padding: SIZES.padding,
+  },
+  assistantButton: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 8,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
+  },
+  assistantContainer: {
+    height: '60%',
+    backgroundColor: 'white',
+    borderTopLeftRadius: SIZES.radius * 2,
+    borderTopRightRadius: SIZES.radius * 2,
+    padding: SIZES.padding,
+  },
+  closeButton: {
+    backgroundColor: COLORS.primary,
+    padding: SIZES.base,
+    borderRadius: SIZES.radius,
+    alignItems: 'center',
+    marginTop: SIZES.padding,
+  },
+  closeButtonText: {
+    color: 'white',
+    ...FONTS.body,
+    fontWeight: '600',
   },
 });
 

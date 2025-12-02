@@ -1,5 +1,8 @@
-import StoreScreen from './screens/StoreScreen';
+import React from 'react';
+import StackNavigator from './navigation/StackNavigator';
 
-export default function Store() {
-  return <StoreScreen />;
-}
+const Store = () => {
+  return <StackNavigator />;
+};
+
+export default Store;

@@ -1,0 +1,12 @@
+yarn run v1.22.22
+$ expo start --web
+Starting project at /app
+Starting Metro Bundler
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundling failed 1898ms node_modules/expo-router/entry.js (843 modules)
+Unable to resolve "./screens/feedback" from "app/_layout.jsx"
+Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundling failed 551ms node_modules/expo-router/entry.js (830 modules)
+Unable to resolve "./screens/feedback" from "app/_layout.jsx"
