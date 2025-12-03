@@ -1,10 +1,10 @@
 import { Tabs } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import Store from './store';
-import Feedback from './screens/feedback';
-import AIHelper from './AIHelper';
-import Explore from './Explore';
-import Profile from './Profile';
+import Feedback from './feedback';
+import AIHelper from './ai_helper';
+import Explore from './explore';
+import Profile from './profile';
 import { COLORS } from './constants/theme';
 
 export default function AppLayout() {
